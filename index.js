@@ -1,41 +1,46 @@
-var path = require('path')
-var fs
+var path = require('path');
+var fs;
 try {
-  fs = require('graceful-fs')
+  fs = require('graceful-fs');
 } catch (err) {
-  fs = require('fs')
+  fs = require('fs');
 }
 
-module.exports = read
+module.exports = read;
 
-function read(filename, done) {
-  filename = path.resolve(filename)
+function read(filename, encoding, done) {
+  filename = path.resolve(filename);
+  if (typeof encoding === 'function' || !Buffer.isEncoding(encoding)) {
+    done = encoding;
+    encoding = 'utf8';
+  }
+
   fs.stat(filename, function (err, stats) {
-    if (err) return done(err)
+    if (err) return done(err);
 
-    var cache = read.cache[filename]
+    var cache = read.cache[filename];
     // only return the cached value if the mtime is exactly the same
     if (cache && cache.mtime.getTime() === stats.mtime.getTime())
-      return done(null, cache.value)
+      return done(null, cache.value);
 
-    fs.readFile(filename, 'utf8', function (err, body) {
-      if (err) return done(err)
+    fs.readFile(filename, {'encoding':encoding}, function (err, body) {
+      if (err) return done(err);
 
       cache = read.cache[filename] = {
         mtime: stats.mtime,
         value: body
-      }
-      done(null, body)
-    })
-  })
+      };
+      done(null, body);
+    });
+  });
 
   return function (fn) {
-    done = fn
-  }
+    done = fn;
+  };
 }
 
 read.clear = function () {
-  read.cache = Object.create(null)
-}
+  read.cache = Object.create(null);
+};
 
-read.clear()
+read.clear();
