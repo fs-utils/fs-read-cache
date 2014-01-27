@@ -24,6 +24,21 @@ describe('fs read cache', function () {
     });
   });
 
+  it('should read a file with base64', function (done) {
+    read(filename, 'base64', function (err, body) {
+      if (err) return done(err);
+
+      var buf = new Buffer('asdf');
+      body.should.equal(buf.toString('base64'));
+      mtime = read.cache[filename].mtime;
+      mtime.should.be.ok;
+      read.cache[filename].value.should.equal(buf.toString('base64'));
+
+      read.clear();
+      done();
+    });
+  });
+
   it('should read a file', function (done) {
     read(filename, function (err, body) {
       if (err) return done(err);
