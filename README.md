@@ -1,4 +1,4 @@
-# fs read cache [![Build Status](https://travis-ci.org/jonathanong/fs-read-cache.js.png)](https://travis-ci.org/jonathanong/fs-read-cache.js)
+# fs read cache [![Build Status](https://travis-ci.org/jonathanong/fs-read-cache.png)](https://travis-ci.org/jonathanong/fs-read-cache.js)
 
 Caches utf8 files internally based on the files' mtime. I'm not sure how much performance this adds, and mtimes are per-second, so this would fail if the file is changed multiple times in a second.
 
