@@ -18,7 +18,7 @@
     "url": "https://github.com/jonathanong/fs-read-cache/issues"
   },
   "devDependencies": {
-    "mocha": "*",
+    "mocha": "2.4.1",
     "should": "*"
   },
   "scripts": {
